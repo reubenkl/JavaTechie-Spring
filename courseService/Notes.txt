@@ -1,0 +1,44 @@
+
+[
+
+    {
+        "courseName":"SpringBoot",
+            "description":"End to End concept coverage",
+            "traineeName":"Jackson",
+            "startDate":"05-03-2024",
+            "fee":3000,
+            "duration":"30",
+            "courseType":"Offline",
+            "isCertificateAvailable":true
+    },
+    {
+        "courseName":"Microservices",
+            "description":"End to End concept coverage",
+            "traineeName":"Robert",
+            "startDate":"01-03-2024",
+            "fee":6000,
+            "duration":"90",
+            "courseType":"Online",
+            "isCertificateAvailable":true
+    },
+    {
+        "courseName":"Java",
+            "description":"End to End concept coverage",
+            "traineeName":"Reynold",
+            "startDate":"10-03-2024",
+            "fee":9000,
+            "duration":"60",
+            "courseType":"Offline",
+            "isCertificateAvailable":true
+    },
+    {
+        "courseName":"Servlets",
+            "description":"End to End concept coverage",
+            "traineeName":"Sam",
+            "startDate":"10-03-2024",
+            "fee":4000,
+            "duration":"30",
+            "courseType":"Offline",
+            "isCertificateAvailable":false
+    }
+]
