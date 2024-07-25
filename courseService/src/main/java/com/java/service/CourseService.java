@@ -1,6 +1,12 @@
 package com.java.service;
 
-import com.java.dto.Course;
+import com.java.dto.CourseRequestDTO;
+import com.java.dto.CourseResponseDTO;
+import com.java.model.CourseEntity;
+import com.java.repository.CourseRepository;
+import com.java.util.CourseConverter;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -9,62 +15,80 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class CourseService implements Serializable{
+public class CourseService{
+	
+	private CourseRepository courseRepository;
+	
+	@Autowired
+	public CourseService (CourseRepository courseRepository) {
+		this.courseRepository = courseRepository;
+	}
 
-    private List<Course> coursesDb = new ArrayList<>();
-    public Course addCourse(Course course){
-        course.setCourseId(new Random().nextInt(32500));
-        coursesDb.add(course);
-        return course;
+    private List<CourseResponseDTO> coursesDb = new ArrayList<>();
+    
+    public CourseResponseDTO addCourse(CourseRequestDTO courseReqDTO){
+    	//convert from Request DTO to Entity
+    	CourseEntity courseEntity =  CourseConverter.convertReqToEntity(courseReqDTO);
+    	
+    	//Save the Course Object
+        CourseEntity savedCourseEntity = courseRepository.save(courseEntity);
+        
+        //convert from Entity to Response DTO
+        CourseResponseDTO courseResDTO = CourseConverter.convertEntityToRes(savedCourseEntity);
+        courseResDTO.setCourseUniqueCode(UUID.randomUUID().toString());
+        
+        return courseResDTO;
     }
 
-    public List<Course> addCourses(List<Course> courses){
-        for(Course course : courses){
-            course.setCourseId(new Random().nextInt(32500));
-            coursesDb.add(course);
-        }
-        return courses;
+    public List<CourseResponseDTO> getAllCourses(){
+    	List<CourseEntity> courses = courseRepository.findAll();
+        return courses.stream().map(CourseConverter::convertEntityToRes).collect(Collectors.toList());
     }
-
-    public List<Course> getAllCourses(){
-        return coursesDb;
-    }
-    public Course getCourseById(Integer courseId){
-        return coursesDb.stream()
-                .filter(course -> course.getCourseId().equals(courseId))
-                .findFirst().orElse(null);
+    public CourseResponseDTO getCourseById(Integer courseId){
+    	Optional<CourseEntity> courseEntity = courseRepository.findById(courseId);
+    	CourseResponseDTO courseResDTO = null;
+    	if(courseEntity.isPresent()) {
+    		courseResDTO = CourseConverter.convertEntityToRes(courseEntity.get());
+    	}
+        return courseResDTO;
     }
 
     public void deleteCourseById(Integer courseId){
-        Course courseFromDb = getCourseById(courseId);
-        coursesDb.remove(courseFromDb);
+        courseRepository.deleteById(courseId);
     }
-    public Course updateCourse(Integer courseId, Course updatedCourse){
-        Course courseFromDb = getCourseById(courseId);
-        coursesDb.set(coursesDb.indexOf(courseFromDb),updatedCourse);
-        return updatedCourse;
+    public CourseResponseDTO updateCourse(Integer courseId, CourseRequestDTO updatedCourse){
+    	Optional<CourseEntity> courseFromDb = courseRepository.findById(courseId);
+    	CourseEntity courseEntity = null;
+    	if(courseFromDb.isPresent()) {
+    		courseEntity = courseFromDb.get();
+    	}
+    	courseEntity.setCourseName(updatedCourse.getCourseName());
+    	courseEntity.setStartDate(updatedCourse.getStartDate());
+    	CourseEntity savedCourseEntity = courseRepository.save(courseEntity);
+    	
+        return CourseConverter.convertEntityToRes(savedCourseEntity);
     }
 
-    public List<Object> getCountBasedOnCourseType(){
-
-        @Component
-        class courseTypeCount implements Serializable {
-            String courseType;
-            long count;
-
-            public courseTypeCount(String getCourseType, Long count){
-                this.courseType = getCourseType;
-                this.count = count;
-            }
-        }
-
-        Map<String, Long> resultMap = new HashMap<>();
-        resultMap = coursesDb.stream()
-                .collect(Collectors.groupingBy(Course::getCourseType, Collectors.counting()));
-        List<Object> result = new ArrayList<>();
-        for(String resultCourse : resultMap.keySet()){
-            result.add(new courseTypeCount(resultCourse, resultMap.get(resultCourse)));
-        }
-        return result;
-    }
+//    public List<Object> getCountBasedOnCourseType(){
+//
+//        @Component
+//        class courseTypeCount implements Serializable {
+//            String courseType;
+//            long count;
+//
+//            public courseTypeCount(String getCourseType, Long count){
+//                this.courseType = getCourseType;
+//                this.count = count;
+//            }
+//        }
+//
+//        Map<String, Long> resultMap = new HashMap<>();
+//        resultMap = coursesDb.stream()
+//                .collect(Collectors.groupingBy(Course::getCourseType, Collectors.counting()));
+//        List<Object> result = new ArrayList<>();
+//        for(String resultCourse : resultMap.keySet()){
+//            result.add(new courseTypeCount(resultCourse, resultMap.get(resultCourse)));
+//        }
+//        return result;
+//    }
 }
