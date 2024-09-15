@@ -1,6 +1,5 @@
 package com.java.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +20,25 @@ import com.java.service.CourseService;
 
 @RestController
 @RequestMapping("/api/course")
-public class CourseServiceControlller {
+public class CourseServiceController {
 
     private CourseService courseService;
 
     @Autowired
-    private CourseServiceControlller(CourseService courseService){
+    private CourseServiceController(CourseService courseService){
         this.courseService = courseService;
     }
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<CourseResponseDTO> createCourse(@RequestBody CourseRequestDTO courseReqDTO){	
     	CourseResponseDTO courseResDTO = courseService.addCourse(courseReqDTO);
         return new ResponseEntity<>(courseResDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/createBatch")
+    public ResponseEntity<List<CourseResponseDTO>> createCourses(@RequestBody List<CourseRequestDTO> courseReqDTOs){
+        List<CourseResponseDTO> courseResDTOs = courseService.addCourses(courseReqDTOs);
+        return new ResponseEntity<>(courseResDTOs, HttpStatus.CREATED);
     }
 
     @GetMapping

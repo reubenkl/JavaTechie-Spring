@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class CourseService{
 	
 	private CourseRepository courseRepository;
-	
+
 	@Autowired
 	public CourseService (CourseRepository courseRepository) {
 		this.courseRepository = courseRepository;
@@ -39,6 +39,23 @@ public class CourseService{
         
         return courseResDTO;
     }
+
+	public List<CourseResponseDTO> addCourses(List<CourseRequestDTO> courseReqDTOs){
+		List<CourseResponseDTO> courseResponseDTOs = new ArrayList<>();
+		courseReqDTOs.stream().forEach(courseReqDTO -> {
+			//convert from Request DTO to Entity
+			CourseEntity courseEntity =  CourseConverter.convertReqToEntity(courseReqDTO);
+
+			//Save the Course Object
+			CourseEntity savedCourseEntity = courseRepository.save(courseEntity);
+
+			//convert from Entity to Response DTO
+			CourseResponseDTO courseResDTO = CourseConverter.convertEntityToRes(savedCourseEntity);
+			courseResDTO.setCourseUniqueCode(UUID.randomUUID().toString());
+			courseResponseDTOs.add(courseResDTO);
+		});
+		return courseResponseDTOs;
+	}
 
     public List<CourseResponseDTO> getAllCourses(){
     	List<CourseEntity> courses = courseRepository.findAll();
@@ -64,13 +81,14 @@ public class CourseService{
     	}
     	courseEntity.setCourseName(updatedCourse.getCourseName());
     	courseEntity.setStartDate(updatedCourse.getStartDate());
+//
+		courseEntity.setCertificateAvailable(updatedCourse.isCertificateAvailable());
     	CourseEntity savedCourseEntity = courseRepository.save(courseEntity);
     	
         return CourseConverter.convertEntityToRes(savedCourseEntity);
     }
 
 //    public List<Object> getCountBasedOnCourseType(){
-//
 //        @Component
 //        class courseTypeCount implements Serializable {
 //            String courseType;
