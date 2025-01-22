@@ -2,6 +2,7 @@ package com.java.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class CourseServiceController {
     }
 
     @PostMapping(path = "/create")
-    public ResponseEntity<CourseResponseDTO> createCourse(@RequestBody CourseRequestDTO courseReqDTO){	
+    public ResponseEntity<CourseResponseDTO> createCourse(@RequestBody CourseRequestDTO courseReqDTO){
     	CourseResponseDTO courseResDTO = courseService.addCourse(courseReqDTO);
         return new ResponseEntity<>(courseResDTO, HttpStatus.CREATED);
     }
@@ -50,7 +51,11 @@ public class CourseServiceController {
     @GetMapping("/{courseId}")
     public ResponseEntity<CourseResponseDTO> getCourseById(@PathVariable Integer courseId){
     	CourseResponseDTO course = courseService.getCourseById(courseId);
-        return new ResponseEntity<>(course, HttpStatus.OK);
+        if(course!=null){
+            return new ResponseEntity<>(course, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(course, HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{courseId}")

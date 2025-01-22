@@ -4,11 +4,11 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseRequestDTO {
@@ -74,7 +74,7 @@ public class CourseRequestDTO {
 	public boolean isCertificateAvailable() {
 		return isCertificateAvailable;
 	}
-	public void setCertificateAvailable(boolean isCertificateAvailable) {
+	public void setIsCertificateAvailable(boolean isCertificateAvailable) {
 		this.isCertificateAvailable = isCertificateAvailable;
 	}
 

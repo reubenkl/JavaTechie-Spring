@@ -68,7 +68,7 @@ public class CourseResponseDTO {
 	public boolean isCertificateAvailable() {
 		return isCertificateAvailable;
 	}
-	public void setCertificateAvailable(boolean isCertificateAvailable) {
+	public void setIsCertificateAvailable(boolean isCertificateAvailable) {
 		this.isCertificateAvailable = isCertificateAvailable;
 	}
 	public String getCourseUniqueCode() {
