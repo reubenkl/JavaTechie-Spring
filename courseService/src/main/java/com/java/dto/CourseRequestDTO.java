@@ -71,7 +71,7 @@ public class CourseRequestDTO {
 	public void setCourseType(String courseType) {
 		this.courseType = courseType;
 	}
-	public boolean isCertificateAvailable() {
+	public boolean getIsCertificateAvailable() {
 		return isCertificateAvailable;
 	}
 	public void setIsCertificateAvailable(boolean isCertificateAvailable) {

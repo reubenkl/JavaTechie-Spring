@@ -16,7 +16,7 @@ public class CourseConverter {
 		courseEntity.setFee(courseReq.getFee());
 		courseEntity.setStartDate(courseReq.getStartDate());
 		courseEntity.setTraineeName(courseReq.getTraineeName());
-		courseEntity.setCertificateAvailable(courseReq.isCertificateAvailable());
+		courseEntity.setCertificateAvailable(courseReq.getIsCertificateAvailable());
 		return courseEntity;
 	}
 	

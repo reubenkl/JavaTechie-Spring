@@ -82,7 +82,7 @@ public class CourseService{
     	courseEntity.setCourseName(updatedCourse.getCourseName());
     	courseEntity.setStartDate(updatedCourse.getStartDate());
 //
-		courseEntity.setCertificateAvailable(updatedCourse.isCertificateAvailable());
+		courseEntity.setCertificateAvailable(updatedCourse.getIsCertificateAvailable());
     	CourseEntity savedCourseEntity = courseRepository.save(courseEntity);
     	
         return CourseConverter.convertEntityToRes(savedCourseEntity);
